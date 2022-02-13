@@ -25,9 +25,12 @@ describe('ArticlesCell', () => {
     const articles = standard().articles
     render(<Success articles={articles} />)
 
-    expect(screen.getByText(articles[0].title)).toBeInTheDocument()
-    expect(screen.getByText(articles[0].body)).toBeInTheDocument()
-    expect(screen.getByText(articles[1].title)).toBeInTheDocument()
-    expect(screen.getByText(articles[1].body)).toBeInTheDocument()
+    articles.forEach((article) => {
+      const truncatedBody = article.body.substring(0, 10)
+      const regex = new RegExp(`${truncatedBody}.*\.{3}`)
+      expect(screen.getByText(article.title)).toBeInTheDocument()
+      expect(screen.queryByText(article.body)).not.toBeInTheDocument()
+      expect(screen.getByText(regex)).toBeInTheDocument()
+    })
   })
 })
